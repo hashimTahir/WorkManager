@@ -7,6 +7,7 @@ class Constants {
         const val IMAGE_WORK = "hImageWork"
         const val IMAGE_URI = "hImageUri"
         const val OUTPUT_PATH = "blur_filter_outputs"
+        const val H_GET_IMAGE_CONTENT = "image/*"
 
 
         @JvmField

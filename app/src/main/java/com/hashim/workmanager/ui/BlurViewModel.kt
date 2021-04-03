@@ -4,16 +4,25 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.work.*
+import androidx.lifecycle.MutableLiveData
+import androidx.work.Data
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.hashim.workmanager.Constants
 import com.hashim.workmanager.Constants.Companion.IMAGE_WORK
 import com.hashim.workmanager.Constants.Companion.TAG_OUTPUT
+import com.hashim.workmanager.ui.blur.OutputEvents
+import com.hashim.workmanager.ui.blur.OutputEvents.OnSetImageUri
 
 class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
     private var hImageUri: Uri? = null
     private val hWorkManager = WorkManager.getInstance(application)
     private val hWorkInfoLd: LiveData<List<WorkInfo>>
+
+    private val _hOutputEvents = MutableLiveData<OutputEvents>()
+    val hOutputEvents: LiveData<OutputEvents>
+        get() = _hOutputEvents
 
     init {
         hWorkInfoLd = hWorkManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
@@ -35,7 +44,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*Apply the blur effect on the selected image to emulate the long running task*/
-    fun hApplyBlur() {
+    fun hApplyBlur(hBlurLevel: Int) {
 //
 //        var hWork = hWorkManager.beginUniqueWork(
 //            IMAGE_WORK,                //Work Name
@@ -43,5 +52,12 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 //            OneTimeWorkRequest.from(/*Todo: add the worker*/)    //Request type--OneTimeWorkRequest  -PeriodicWorkRequest
 //        )
 
+    }
+
+    fun hSetImageUri(uri: Uri?) {
+        uri?.let {
+            hImageUri = uri
+            _hOutputEvents.value = OnSetImageUri(hImageUri!!)
+        }
     }
 }

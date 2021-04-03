@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_blur">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            android:id="@+id/action_hBlurFragment_to_hSelectImageFragment"
             app:destination="@id/hSelectImageFragment" />
     </fragment>
     <fragment
@@ -20,7 +20,7 @@
         tools:layout="@layout/fragment_select_image">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            android:id="@+id/action_hSelectImageFragment_to_hBlurFragment"
             app:destination="@id/hBlurFragment" />
     </fragment>
 </navigation>
