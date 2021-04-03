@@ -15,7 +15,7 @@ import com.hashim.workmanager.utis.hWriteBitmapToFile
 import timber.log.Timber
 
 
-class BlurWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
+class BlurWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
 
     override fun doWork(): Result {
         val hContext = applicationContext

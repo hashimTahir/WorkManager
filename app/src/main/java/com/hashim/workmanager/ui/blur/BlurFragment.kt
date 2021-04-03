@@ -1,4 +1,4 @@
-package com.hashim.workmanager.ui
+package com.hashim.workmanager.ui.blur
 
 import android.os.Bundle
 import android.view.LayoutInflater
