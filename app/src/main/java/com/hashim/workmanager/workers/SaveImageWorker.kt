@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.hashim.workmanager.Constants.Companion.IMAGE_URI
+import com.hashim.workmanager.utis.Constants.Companion.IMAGE_URI
 import com.hashim.workmanager.utis.hMakeNotification
 import com.hashim.workmanager.utis.hSleep
 import timber.log.Timber

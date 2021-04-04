@@ -1,4 +1,4 @@
-package com.hashim.workmanager.ui.blur
+package com.hashim.workmanager.ui.fragments
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
-import com.hashim.workmanager.Constants.Companion.IMAGE_URI
 import com.hashim.workmanager.databinding.FragmentBlurBinding
-import com.hashim.workmanager.ui.BlurViewModel
-import com.hashim.workmanager.ui.blur.OutputEvents.OnSetImageUri
+import com.hashim.workmanager.ui.MainViewModel
+import com.hashim.workmanager.ui.events.OutputEvents.OnSetImageUri
+import com.hashim.workmanager.utis.Constants.Companion.IMAGE_URI
 import timber.log.Timber
 
 class BlurFragment : Fragment() {
     lateinit var hFragmentBlurBinding: FragmentBlurBinding
-    val hBlurViewModel: BlurViewModel by activityViewModels()
+    val hMainViewModel: MainViewModel by activityViewModels()
     var hBlurLevel: Int = 1
 
     override fun onCreateView(
@@ -55,12 +55,12 @@ class BlurFragment : Fragment() {
             }
         }
         hFragmentBlurBinding.goButton.setOnClickListener {
-            hBlurViewModel.hApplyBlur(hBlurLevel)
+            hMainViewModel.hApplyBlur(hBlurLevel)
         }
     }
 
     private fun hSubscribeObservers() {
-        hBlurViewModel.hOutputEvents.observe(viewLifecycleOwner) {
+        hMainViewModel.hOutputEvents.observe(viewLifecycleOwner) {
             when (it) {
                 is OnSetImageUri -> {
                     Glide.with(requireContext())
@@ -69,7 +69,7 @@ class BlurFragment : Fragment() {
                 }
             }
         }
-        hBlurViewModel.hWorkInfoLd.observe(viewLifecycleOwner) { listWorkInfo ->
+        hMainViewModel.hWorkInfoLd.observe(viewLifecycleOwner) { listWorkInfo ->
             if (listWorkInfo.isNullOrEmpty()) {
                 Timber.d("Null list")
             } else {
@@ -80,7 +80,7 @@ class BlurFragment : Fragment() {
                     Timber.d("Work is finished")
                     val hOutputImageUri = hWorkInfo.outputData.getString(IMAGE_URI)
                     if (!hOutputImageUri.isNullOrEmpty()) {
-                        hBlurViewModel.hSetImageUri(Uri.parse(hOutputImageUri))
+                        hMainViewModel.hSetImageUri(Uri.parse(hOutputImageUri))
                     }
                 } else {
                     hShowProgressBar()

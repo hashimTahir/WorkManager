@@ -1,4 +1,4 @@
-package com.hashim.workmanager.ui.blur
+package com.hashim.workmanager.ui.events
 
 import android.net.Uri
 

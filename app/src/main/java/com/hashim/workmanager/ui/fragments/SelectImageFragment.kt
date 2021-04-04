@@ -1,4 +1,4 @@
-package com.hashim.workmanager.ui
+package com.hashim.workmanager.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +8,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.hashim.workmanager.Constants.Companion.H_GET_IMAGE_CONTENT
 import com.hashim.workmanager.PermissionsUtils.Companion.hRequestPermission
 import com.hashim.workmanager.R
 import com.hashim.workmanager.databinding.FragmentSelectImageBinding
+import com.hashim.workmanager.ui.MainViewModel
+import com.hashim.workmanager.utis.Constants.Companion.H_GET_IMAGE_CONTENT
 import timber.log.Timber
 
 
 class SelectImageFragment : Fragment() {
     private var hPermissionsCount: Int = 0
     lateinit var hFragmentSelectImageBinding: FragmentSelectImageBinding
-    val hBlurViewModel: BlurViewModel by activityViewModels()
+    val hMainViewModel: MainViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,7 +62,7 @@ class SelectImageFragment : Fragment() {
     private val hSelectImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent())
         {
-            hBlurViewModel.hSetImageUri(it)
+            hMainViewModel.hSetImageUri(it)
             findNavController().navigate(R.id.action_hSelectImageFragment_to_hBlurFragment)
         }
 

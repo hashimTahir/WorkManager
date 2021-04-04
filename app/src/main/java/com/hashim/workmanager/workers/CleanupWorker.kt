@@ -3,7 +3,7 @@ package com.hashim.workmanager.workers
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.hashim.workmanager.Constants.Companion.OUTPUT_PATH
+import com.hashim.workmanager.utis.Constants.Companion.OUTPUT_PATH
 import com.hashim.workmanager.utis.hMakeNotification
 import com.hashim.workmanager.utis.hSleep
 import timber.log.Timber

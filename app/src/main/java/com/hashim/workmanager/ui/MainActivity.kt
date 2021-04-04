@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.hashim.workmanager.R
@@ -15,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var hActivityMainBinding: ActivityMainBinding
     private lateinit var hNavHostFragments: NavHostFragment
     private lateinit var hNavController: NavController
-    val hBlurViewModel :BlurViewModel by viewModels()
+    val hMainViewModel: MainViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
