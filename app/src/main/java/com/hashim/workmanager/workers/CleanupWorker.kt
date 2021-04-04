@@ -17,6 +17,8 @@ class CleanupWorker(
     workerParams
 ) {
     override fun doWork(): Result {
+        Timber.d("CleanupWorker Called")
+
         // Makes a notification when the work starts and slows down the work so that
         hMakeNotification("Cleaning up old temporary files", applicationContext)
         hSleep()

@@ -28,6 +28,7 @@ class SaveImageWorker(
     )
 
     override fun doWork(): Result {
+        Timber.d("Save Work Called")
 
         hMakeNotification("Saving image", applicationContext)
         hSleep()

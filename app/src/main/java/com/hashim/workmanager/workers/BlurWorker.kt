@@ -18,6 +18,8 @@ import timber.log.Timber
 class BlurWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
 
     override fun doWork(): Result {
+        Timber.d("BlurWorker Called")
+
         val hContext = applicationContext
 
         val hUri = inputData.getString(IMAGE_URI)

@@ -1,5 +1,6 @@
 package com.hashim.workmanager.ui.blur
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.hashim.workmanager.Constants.Companion.IMAGE_URI
 import com.hashim.workmanager.databinding.FragmentBlurBinding
 import com.hashim.workmanager.ui.BlurViewModel
 import com.hashim.workmanager.ui.blur.OutputEvents.OnSetImageUri
+import timber.log.Timber
 
 class BlurFragment : Fragment() {
     lateinit var hFragmentBlurBinding: FragmentBlurBinding
@@ -61,8 +64,23 @@ class BlurFragment : Fragment() {
             when (it) {
                 is OnSetImageUri -> {
                     Glide.with(requireContext())
-                        .load(it)
+                        .load(it.uri)
                         .into(hFragmentBlurBinding.imageView)
+                }
+            }
+        }
+        hBlurViewModel.hWorkInfoLd.observe(viewLifecycleOwner) { listWorkInfo ->
+            if (listWorkInfo.isNullOrEmpty()) {
+                Timber.d("Null list")
+            } else {
+                Timber.d("Work info $listWorkInfo")
+                val hWorkInfo = listWorkInfo.get(0)
+                if (hWorkInfo.state.isFinished) {
+                    Timber.d("Work is finished")
+                    val hOutputImageUri = hWorkInfo.outputData.getString(IMAGE_URI)
+                    if (!hOutputImageUri.isNullOrEmpty()) {
+                        hBlurViewModel.hSetImageUri(Uri.parse(hOutputImageUri))
+                    }
                 }
             }
         }

@@ -19,7 +19,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
     private var hImageUri: Uri? = null
     private val hWorkManager = WorkManager.getInstance(application)
-    private val hWorkInfoLd: LiveData<List<WorkInfo>>
+    val hWorkInfoLd: LiveData<List<WorkInfo>>
 
     private val _hOutputEvents = MutableLiveData<OutputEvents>()
     val hOutputEvents: LiveData<OutputEvents>
@@ -81,12 +81,13 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
 
         val hSaveWork = OneTimeWorkRequestBuilder<SaveImageWorker>()
-            .setConstraints(hWorkConstraints)
             .addTag(TAG_OUTPUT)
             .build()
 
         /*Chaining works togather*/
         hWork = hWork.then(hSaveWork)
+
+        hWork.enqueue()
 
     }
 

@@ -20,6 +20,6 @@ class Constants {
         const val CHANNEL_ID = "NOTIFICATION"
         const val NOTIFICATION_ID = 1
 
-        const val DELAY_TIME_MILLIS: Long = 3000
+        const val DELAY_TIME_MILLIS: Long = 1000
     }
 }
