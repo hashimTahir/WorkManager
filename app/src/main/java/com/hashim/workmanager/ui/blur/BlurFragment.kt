@@ -76,13 +76,34 @@ class BlurFragment : Fragment() {
                 Timber.d("Work info $listWorkInfo")
                 val hWorkInfo = listWorkInfo.get(0)
                 if (hWorkInfo.state.isFinished) {
+                    hHideProgressBar()
                     Timber.d("Work is finished")
                     val hOutputImageUri = hWorkInfo.outputData.getString(IMAGE_URI)
                     if (!hOutputImageUri.isNullOrEmpty()) {
                         hBlurViewModel.hSetImageUri(Uri.parse(hOutputImageUri))
                     }
+                } else {
+                    hShowProgressBar()
                 }
             }
+        }
+    }
+
+    private fun hShowProgressBar() {
+        with(hFragmentBlurBinding) {
+            progressBar.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
+            goButton.visibility = View.GONE
+            seeFileButton.visibility = View.GONE
+        }
+
+    }
+
+    private fun hHideProgressBar() {
+        with(hFragmentBlurBinding) {
+            progressBar.visibility = View.GONE
+            cancelButton.visibility = View.GONE
+            goButton.visibility = View.VISIBLE
         }
     }
 }
