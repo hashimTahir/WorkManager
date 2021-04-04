@@ -5,14 +5,15 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.work.Data
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
+import androidx.work.*
 import com.hashim.workmanager.Constants
 import com.hashim.workmanager.Constants.Companion.IMAGE_WORK
 import com.hashim.workmanager.Constants.Companion.TAG_OUTPUT
 import com.hashim.workmanager.ui.blur.OutputEvents
 import com.hashim.workmanager.ui.blur.OutputEvents.OnSetImageUri
+import com.hashim.workmanager.workers.BlurWorker
+import com.hashim.workmanager.workers.CleanupWorker
+import com.hashim.workmanager.workers.SaveImageWorker
 
 class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -45,12 +46,47 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
     /*Apply the blur effect on the selected image to emulate the long running task*/
     fun hApplyBlur(hBlurLevel: Int) {
-//
-//        var hWork = hWorkManager.beginUniqueWork(
-//            IMAGE_WORK,                //Work Name
-//            ExistingWorkPolicy.REPLACE,   //Polices- Replace-Keep-Append-Append-Or-Replace  (self-explanatory)
-//            OneTimeWorkRequest.from(/*Todo: add the worker*/)    //Request type--OneTimeWorkRequest  -PeriodicWorkRequest
-//        )
+
+        /*Clean up task if button is pressed multiple times. Clean up worker is used to
+        * delete the saved files*/
+
+        var hWork = hWorkManager.beginUniqueWork(
+            IMAGE_WORK,                //Work Name
+            ExistingWorkPolicy.REPLACE,   //Polices- Replace-Keep-Append-
+            // Append-Or-Replace  (self-explanatory)
+            OneTimeWorkRequest.from(CleanupWorker::class.java)    //Request type
+            // --OneTimeWorkRequest  -PeriodicWorkRequest
+        )
+
+        for (level in 0 until hBlurLevel) {
+            val hBlurBuilder = OneTimeWorkRequestBuilder<BlurWorker>()
+            /*The first time the apply blue is called  image uri would be the hImageUri
+            * After the first blur the input data would be the output of previous operation*/
+
+            if (level == 0) {
+                /*Create data using the hImageUri passed from the view for the first time*/
+                hBlurBuilder.setInputData(hCreateDataForWork())
+            }
+
+            /*when not 0 aplly blur worker will already have output data due to the first
+            * operation*/
+            /*Chaining works*/
+            hWork = hWork.then(hBlurBuilder.build())
+
+        }
+        /*Constraints for the work*/
+        val hWorkConstraints = Constraints.Builder()
+            .setRequiresCharging(true)
+            .build()
+
+
+        val hSaveWork = OneTimeWorkRequestBuilder<SaveImageWorker>()
+            .setConstraints(hWorkConstraints)
+            .addTag(TAG_OUTPUT)
+            .build()
+
+        /*Chaining works togather*/
+        hWork = hWork.then(hSaveWork)
 
     }
 
